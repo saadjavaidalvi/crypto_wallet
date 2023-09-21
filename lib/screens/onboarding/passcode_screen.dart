@@ -1,7 +1,6 @@
 import 'package:cryp_wallet/config/colors.dart';
 import 'package:cryp_wallet/config/text_style.dart';
 import 'package:cryp_wallet/screens/onboarding/import_multicoin_wallet.dart';
-import 'package:cryp_wallet/helpers/my_shared_preferences.dart';
 import 'package:cryp_wallet/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
