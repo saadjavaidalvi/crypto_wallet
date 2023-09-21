@@ -1,11 +1,13 @@
 import 'package:cryp_wallet/redux/app_state.dart';
 import 'package:cryp_wallet/screens/splash/splash_screen.dart';
+import 'package:cryp_wallet/utils/my_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:redux/redux.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await MySharedPreference().init();
   runApp(const MyApp());
 }
 

@@ -22,7 +22,9 @@ class Coin {
 
 List<Coin> coinList = [
   Coin(
-    icon: const Icon(Icons.circle),
+    icon: const Icon(
+      Icons.percent,
+    ),
     name: 'Bitcoin',
     usdPrice: '17.600',
     rate: '+8.64%',
@@ -30,7 +32,9 @@ List<Coin> coinList = [
     usdTotal: '17693.456',
   ),
   Coin(
-    icon: const Icon(Icons.circle),
+    icon: const Icon(
+      Icons.ac_unit_outlined,
+    ),
     name: 'Ethereum',
     usdPrice: '129',
     rate: '+4.93%',
@@ -38,7 +42,7 @@ List<Coin> coinList = [
     usdTotal: '141.04',
   ),
   Coin(
-    icon: const Icon(Icons.circle),
+    icon: const Icon(Icons.vaccines),
     name: 'Binance Coin',
     usdPrice: '20',
     rate: '+7.33%',
@@ -46,7 +50,7 @@ List<Coin> coinList = [
     usdTotal: '740',
   ),
   Coin(
-    icon: const Icon(Icons.circle),
+    icon: const Icon(Icons.earbuds_battery),
     name: 'Litecoin',
     usdPrice: '31.33',
     rate: '+1.73%',
@@ -54,7 +58,7 @@ List<Coin> coinList = [
     usdTotal: '352.24',
   ),
   Coin(
-    icon: const Icon(Icons.circle),
+    icon: const Icon(Icons.cabin),
     name: 'XRP',
     usdPrice: '0.31',
     rate: '+3.02%',
@@ -62,7 +66,7 @@ List<Coin> coinList = [
     usdTotal: '6.2',
   ),
   Coin(
-    icon: const Icon(Icons.circle),
+    icon: const Icon(Icons.kayaking),
     name: 'Bitcoin Cash',
     usdPrice: '324',
     rate: '-2.09%',

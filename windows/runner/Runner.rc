@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "cryp_wallet" "\0"
+            VALUE "FileDescription", "Voz Wallet" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "cryp_wallet" "\0"
+            VALUE "InternalName", "Voz Wallet" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "cryp_wallet.exe" "\0"
-            VALUE "ProductName", "cryp_wallet" "\0"
+            VALUE "ProductName", "Voz Wallet" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

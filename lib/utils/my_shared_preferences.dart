@@ -19,6 +19,11 @@ class MySharedPreference {
     await sp.setString(passCodeString, pin);
   }
 
+  Future<bool> passcodePinExists() async {
+    return sp.containsKey(passCodeString);
+    // return sp.getString(passCodeString);
+  }
+
   Future isValidPasscodePin() async {
     return sp.getString(passCodeString);
   }

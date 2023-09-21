@@ -1,6 +1,9 @@
 import 'package:cryp_wallet/config/colors.dart';
 import 'package:cryp_wallet/config/text_style.dart';
+import 'package:cryp_wallet/screens/onboarding/import_multicoin_wallet.dart';
 import 'package:cryp_wallet/screens/onboarding/passcode_screen.dart';
+import 'package:cryp_wallet/utils/my_shared_preferences.dart';
+import 'package:cryp_wallet/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,23 +13,25 @@ class InitialLandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /* appBar: AppBar(
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
         title: const Text(
           '',
         ),
-      ),
+      ), */
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          const CustomAppBar(text: ''),
           _iconLogo(),
           _customTile(
             leadingIcon: const CircleAvatar(
-              backgroundColor: ConstColors.grey,
+              backgroundColor: ConstColors.black,
               child: IconButton(
                 splashColor: Colors.transparent,
                 onPressed: null,
+                // color: Colors.black,
                 icon: Icon(
                   Icons.add,
                   color: Colors.white,
@@ -47,7 +52,7 @@ class InitialLandingPage extends StatelessWidget {
             text: 'I already have a wallet',
             subtitle: 'Import a wallet',
             leadingIcon: CircleAvatar(
-              backgroundColor: Colors.grey,
+              backgroundColor: ConstColors.black,
               child: IconButton(
                 onPressed: () {},
                 icon: const Icon(
@@ -62,6 +67,13 @@ class InitialLandingPage extends StatelessWidget {
                   createNew: true,
                 ),
               );
+              bool exists = await MySharedPreference().passcodePinExists();
+              if (exists) {
+                Get.to(
+                  const ImportMultiCoinWallet(),
+                  transition: Transition.rightToLeft,
+                );
+              }
             },
           ),
           Container(
@@ -85,11 +97,11 @@ class InitialLandingPage extends StatelessWidget {
             height: 100,
             width: 100,
             child: Image.asset(
-              'assets/images/c2.png',
+              'assets/images/dxcTrade.png',
             ),
           ),
           Text(
-            'Trust',
+            'Voz Wallet',
             style: pSemiBold20.copyWith(
               fontSize: 30,
             ),
@@ -133,6 +145,7 @@ class InitialLandingPage extends StatelessWidget {
           border: Border.all(
             color: Colors.black,
           ),
+          // color: Colors.blueAccent,
           borderRadius: BorderRadius.circular(20),
         ),
         padding: const EdgeInsets.symmetric(
@@ -161,6 +174,7 @@ class InitialLandingPage extends StatelessWidget {
           ),
           trailing: const AbsorbPointer(
             child: IconButton(
+              // color: Colors.black,
               icon: Icon(
                 Icons.arrow_forward,
                 color: ConstColors.grey,

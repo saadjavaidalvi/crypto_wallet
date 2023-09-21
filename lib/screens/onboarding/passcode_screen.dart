@@ -139,6 +139,13 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                     text: "Continue",
                     color: ConstColors.primary,
                     onTap: () async {
+                      //! REMOVE LATER
+                      Get.to(
+                        const ImportMultiCoinWallet(),
+                        transition: Transition.rightToLeft,
+                      );
+                      //! REMOVE LATER
+
                       if (pinC.text.length < 6) {
                         Fluttertoast.showToast(msg: errorMessage);
                         return;
@@ -153,8 +160,9 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                             return;
                           }
                           Get.back();
-                          await MySharedPreference()
-                              .savePasscodePin(confirmPin);
+                          //! UNCOMMENT LATER
+                          /* await MySharedPreference()
+                              .savePasscodePin(confirmPin); */
                           return;
                         }
                         passCode = pinC.text;
@@ -162,7 +170,8 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                         headerText = 'Confirm Passcode';
                         isConfirming = true;
                         setState(() {});
-                      } else {
+                      }
+                      /* else {
                         String pin = pinC.text;
                         String savedPasscode =
                             await MySharedPreference().isValidPasscodePin();
@@ -175,7 +184,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                           const ImportMultiCoinWallet(),
                           transition: Transition.rightToLeft,
                         );
-                      }
+                      } */
                     },
                   ),
                   const SizedBox(
