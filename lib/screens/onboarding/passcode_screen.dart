@@ -1,3 +1,4 @@
+import 'package:biometric_storage/biometric_storage.dart';
 import 'package:cryp_wallet/config/colors.dart';
 import 'package:cryp_wallet/config/text_style.dart';
 import 'package:cryp_wallet/screens/onboarding/import_multicoin_wallet.dart';
@@ -138,6 +139,15 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                     text: "Continue",
                     color: ConstColors.primary,
                     onTap: () async {
+                      BiometricStorageFile storage = BiometricStorageFile(
+                          BiometricStorage(), '', PromptInfo.defaultValues);
+                      // BiometricStorage().read(name);
+                      // BiometricStorage().
+                      await storage.write('123456');
+                      String response = await storage.read() ?? '';
+
+                      print(response);
+                      return;
                       //! REMOVE LATER
                       Get.to(
                         const ImportMultiCoinWallet(),
