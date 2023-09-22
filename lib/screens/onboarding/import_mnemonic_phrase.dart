@@ -10,14 +10,14 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-class ImportMultiCoinWallet extends StatefulWidget {
-  const ImportMultiCoinWallet({super.key});
+class ImportMnemonicWallet extends StatefulWidget {
+  const ImportMnemonicWallet({super.key});
 
   @override
-  State<ImportMultiCoinWallet> createState() => _ImportMultiCoinWalletState();
+  State<ImportMnemonicWallet> createState() => _ImportMnemonicWalletState();
 }
 
-class _ImportMultiCoinWalletState extends State<ImportMultiCoinWallet> {
+class _ImportMnemonicWalletState extends State<ImportMnemonicWallet> {
   TextEditingController nameC = TextEditingController();
   TextEditingController phraseC = TextEditingController();
 

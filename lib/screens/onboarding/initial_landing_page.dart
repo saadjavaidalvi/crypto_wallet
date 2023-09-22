@@ -1,7 +1,7 @@
 import 'package:cryp_wallet/config/colors.dart';
 import 'package:cryp_wallet/config/text_style.dart';
 import 'package:cryp_wallet/screens/home_screen.dart';
-import 'package:cryp_wallet/screens/onboarding/import_multicoin_wallet.dart';
+import 'package:cryp_wallet/screens/onboarding/import_mnemonic_phrase.dart';
 import 'package:cryp_wallet/screens/onboarding/passcode_screen.dart';
 import 'package:cryp_wallet/helpers/my_shared_preferences.dart';
 import 'package:cryp_wallet/services/crypto_services.dart';
@@ -69,7 +69,7 @@ class InitialLandingPage extends StatelessWidget {
               bool exists = await MySharedPreference().passcodePinExists();
               if (exists) {
                 Get.to(
-                  const ImportMultiCoinWallet(),
+                  const ImportMnemonicWallet(),
                   transition: Transition.rightToLeft,
                 );
               }
