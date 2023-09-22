@@ -1,6 +1,22 @@
 import 'package:intl/intl.dart';
 
 class HelperMethods {
+  List<String> parseList(String listString) {
+    // Remove square brackets at the beginning and end of the string
+    listString = listString.substring(1, listString.length - 1);
+
+    // Split the string by commas and trim each element
+    List<String> elements = listString.split(',').map((e) => e.trim()).toList();
+
+    // Parse each element and add it to the result list
+    List<String> result = [];
+    for (String element in elements) {
+      result.add(element);
+    }
+
+    return result;
+  }
+
   String formatNotificationDateTime(int microsecondsSinceEpoch,
       {bool isUtc = false}) {
     DateTime notificationDate =

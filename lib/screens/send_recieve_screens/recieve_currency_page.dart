@@ -1,3 +1,4 @@
+import 'package:cryp_wallet/Models/coin_model.dart';
 import 'package:cryp_wallet/config/colors.dart';
 import 'package:cryp_wallet/config/images.dart';
 import 'package:cryp_wallet/config/text_style.dart';
@@ -12,9 +13,9 @@ import 'package:share_plus/share_plus.dart';
 class RecieveCurrencyScreen extends StatefulWidget {
   const RecieveCurrencyScreen({
     super.key,
-    this.currency = '',
+    required this.coin,
   });
-  final String currency;
+  final Coin coin;
 
   @override
   State<RecieveCurrencyScreen> createState() => _RecieveCurrencyScreenState();
@@ -25,12 +26,19 @@ class _RecieveCurrencyScreenState extends State<RecieveCurrencyScreen> {
   String magicLink = '';
 
   @override
+  void initState() {
+    super.initState();
+
+    magicLink = widget.coin.address;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
           CustomAppBar(
-            text: "Recieve ${widget.currency}",
+            text: "Recieve ${widget.coin.name}",
           ),
           Expanded(
             child: isLoading
@@ -88,7 +96,7 @@ class _RecieveCurrencyScreenState extends State<RecieveCurrencyScreen> {
           children: [
             Center(
               child: Text(
-                "Your ${widget.currency} Address",
+                "Your ${widget.coin.name} Address",
                 style: pSemiBold20.copyWith(
                   fontSize: 24,
                 ),

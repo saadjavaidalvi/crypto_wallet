@@ -1,11 +1,14 @@
 import 'package:cryp_wallet/Models/coin_model.dart';
 import 'package:cryp_wallet/config/colors.dart';
 import 'package:cryp_wallet/config/text_style.dart';
+import 'package:cryp_wallet/redux/app_state.dart';
 import 'package:cryp_wallet/screens/crypto_detail_page.dart';
 import 'package:cryp_wallet/screens/send_recieve_screens/recieve_currency_option_list.dart';
 import 'package:cryp_wallet/screens/send_recieve_screens/send_currency_option_list_screen.dart';
 import 'package:cryp_wallet/widget/base_inkwell.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,36 +25,43 @@ enum TabIndex {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Coin> s = [];
+  @override
+  void initState() {
+    super.initState();
+
+    _getBtcBalance();
+  }
+
+  _getBtcBalance() async {
+    // await CryptoWalletServices().getERC20Balance();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _buildBody(context));
-  }
-
-  Widget _buildBody(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(20.0),
-          decoration: const BoxDecoration(
-            color: ConstColors.primary,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: 40,
+    return Scaffold(
+      body: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(20.0),
+            decoration: const BoxDecoration(
+              color: ConstColors.primary,
             ),
-            child: Column(
-              children: <Widget>[
-                const SizedBox(height: 10.0),
-                // topBar(),
-                headerContainer(),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 40,
+              ),
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(height: 10.0),
+                  // topBar(),
+                  headerContainer(),
+                ],
+              ),
             ),
           ),
-        ),
-        cryptoList(),
-      ],
+          cryptoList(),
+        ],
+      ),
     );
   }
 
@@ -140,7 +150,9 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(width: 30.0),
                 BaseInkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Fluttertoast.showToast(msg: 'Under Development');
+                  },
                   child: const Column(
                     children: [
                       CircleAvatar(
@@ -158,7 +170,9 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(width: 30.0),
                 BaseInkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Fluttertoast.showToast(msg: 'Under Development');
+                  },
                   child: const Column(
                     children: [
                       CircleAvatar(
@@ -192,55 +206,78 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget cryptoList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      padding: const EdgeInsets.only(
-        left: 10,
-        right: 10,
-        top: 20,
-      ),
-      itemCount: coinList.length,
-      itemBuilder: (context, index) {
-        return
-            /* TransactionWidgetTile(
-              time: DateTime.now(),
-            ); */
-            ListTile(
-          onTap: () {
-            Get.to(
-              CryptoDetailPage(
-                coin: coinList[index],
-              ),
-            );
-          },
-          leading: CircleAvatar(
-            backgroundColor: Colors.black,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(
-                coinList[index].icon.icon,
-                // size: 40,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          title: Text(
-            coinList[index].name,
-            style: pSemiBold18.copyWith(
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          subtitle: Text(
-            coinList[index].rate,
-            style: pRegular14.copyWith(
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          trailing: Text(
-            coinList[index].total,
-          ),
-        );
-      },
-    );
+    return StoreConnector<AppState, List<Coin>>(
+        converter: (store) => store.state.coinList,
+        builder: (context, List<Coin> coinList) {
+          return coinList.isEmpty
+              ? const Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(
+                        color: ConstColors.primary,
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(
+                    left: 10,
+                    right: 10,
+                    top: 20,
+                  ),
+                  itemCount: coinList.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 15,
+                          ),
+                          onTap: () async {
+                            /* List<String> mnemunic =
+                                await MyStorage().getMnemonic();
+                            BigInt ercBalance = (await CryptoWalletServices(
+                                    mnemunic)
+                                .getERC20Balance(
+                                    "0xdac17f958d2ee523a2206206994597c13d831ec7"));
+                            double value = ercBalance.toDouble() / 1000000;
+                            print(value); */
+                            /* EtherAmount etherAmount = EtherAmount.fromBigInt(
+                                EtherUnit.wei, btcBalance); */
+                            // print(etherAmount.getInWei);
+                            Get.to(
+                              CryptoDetailPage(
+                                coin: coinList[index],
+                              ),
+                            );
+                          },
+                          title: Text(
+                            coinList[index].name,
+                            style: pSemiBold18.copyWith(
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          leading: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              coinList[index].icon,
+                              height: 40,
+                              width: 40,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          trailing: Text(
+                            coinList[index].total,
+                          ),
+                        ),
+                        const Divider(),
+                      ],
+                    );
+                  },
+                );
+        });
   }
 }

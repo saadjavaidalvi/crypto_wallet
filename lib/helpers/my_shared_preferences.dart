@@ -4,6 +4,7 @@ class MySharedPreference {
   final String bioAuthenticationString = 'biometricAuthenticationStatus';
   final String loggedInString = 'loggedInStatusString';
   final String passCodeString = 'passCodePinString';
+  final String mnemonicString = 'mnemonicPhraseString';
 
   //Initialize
   static late SharedPreferences sp;
@@ -24,8 +25,12 @@ class MySharedPreference {
     // return sp.getString(passCodeString);
   }
 
-  Future isValidPasscodePin() async {
+  /* Future isValidPasscodePin() async {
     return sp.getString(passCodeString);
+  } */
+
+  Future saveMnemonic(List<String> mnemonic) {
+    return sp.setStringList(mnemonicString, mnemonic);
   }
 
   /* Future saveTcpTransactions(List<TCPTransactionModel> tractions) async {

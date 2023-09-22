@@ -1,6 +1,9 @@
+import 'package:cryp_wallet/Models/coin_model.dart';
 import 'package:cryp_wallet/config/colors.dart';
 import 'package:cryp_wallet/controller/splash_controller.dart';
 import 'package:cryp_wallet/screens/onboarding/onboarding_screen.dart';
+import 'package:cryp_wallet/screens/onboarding/passcode_screen.dart';
+import 'package:cryp_wallet/services/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,38 +21,34 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    splashController.customInit(
+    checkPasscodeStatus();
+
+    /* splashController.customInit(
       className: const OnboardingScreen(),
-    );
+    ); */
     super.initState();
   }
 
-  /* @override
-  void initState() {
-    checkLoginStatus();
-    super.initState();
-  }
-
-  Future checkLoginStatus() async {
-    bool isLoggedIn =
-        MySharedPreference.sp.getBool(MySharedPreference().loggedInString) ??
-            false;
-    bool hasEnabledBio = MySharedPreference.sp
-            .getBool(MySharedPreference().bioAuthenticationString) ??
-        false;
-
-    if (isLoggedIn && hasEnabledBio) {
-      // splashController.customInit(
-      //     className: const BioMetricAuthenticationScreen());
-    } else if (isLoggedIn) {
-      // splashController.customInit(className: const TabScreen());
-    } else {
-      // splashController.customInit(className: const LandingScreen());
-      // splashController.customInit();
+  Future checkPasscodeStatus() async {
+    // await MySharedPreference.sp.clear();
+    final String passcode = MyStorage().getPasscodePin();
+    if (passcode.isEmpty) {
+      splashController.customInit(
+        className: const OnboardingScreen(),
+      );
+      return;
     }
+    initializeAddressAndBalance();
+    splashController.customInit(
+      className: const PasscodeScreen(
+        createNew: false,
+      ),
+    );
+  }
 
-    // setState(() {});
-  } */
+  Future initializeAddressAndBalance() async {
+    await Coin.initializeCoinListVariable(context);
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,11 @@
 import 'package:cryp_wallet/config/colors.dart';
 import 'package:cryp_wallet/config/text_style.dart';
+import 'package:cryp_wallet/screens/home_screen.dart';
 import 'package:cryp_wallet/screens/onboarding/import_multicoin_wallet.dart';
 import 'package:cryp_wallet/screens/onboarding/passcode_screen.dart';
 import 'package:cryp_wallet/helpers/my_shared_preferences.dart';
+import 'package:cryp_wallet/services/crypto_services.dart';
+import 'package:cryp_wallet/services/storage.dart';
 import 'package:cryp_wallet/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,11 +44,7 @@ class InitialLandingPage extends StatelessWidget {
             text: "I don't have the wallet",
             subtitle: 'Create a new multi-chain wallet',
             onTap: () async {
-              await Get.to(
-                const PasscodeScreen(
-                  createNew: true,
-                ),
-              );
+              await createMnemonicAndProceed();
             },
           ),
           _customTile(
@@ -186,4 +185,39 @@ class InitialLandingPage extends StatelessWidget {
       ),
     );
   }
+
+  Future createMnemonicAndProceed() async {
+    await Get.to(
+      const PasscodeScreen(
+        createNew: true,
+      ),
+    );
+
+    bool exists = await MySharedPreference().passcodePinExists();
+    if (!exists) {
+      return;
+    }
+
+    List<String> mnemonic = CryptoWalletServices.generateMnemonic();
+
+    await MyStorage().saveMnemonic(mnemonic.toString());
+
+    //! Need to change that to offAll to remove previous page
+    Get.to(const HomePage());
+
+    /* String encrpt = CryptoWalletServices.encryptMnemonic(
+        mnemonic.toString(), '123456', generateRandomNonce(12));
+    print(encrpt);
+    String decrypt = CryptoWalletServices.decryptMnemonic(encrpt, '123456');
+    print(decrypt); */
+  }
+
+  /* Uint8List generateRandomNonce(int length) {
+    final random = Random.secure();
+    final nonce = Uint8List(length);
+    for (var i = 0; i < length; i++) {
+      nonce[i] = random.nextInt(256); // Generate a random byte (0-255)
+    }
+    return nonce;
+  } */
 }

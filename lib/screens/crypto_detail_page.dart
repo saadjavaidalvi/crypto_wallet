@@ -74,19 +74,22 @@ class _CryptoDetailPageState extends State<CryptoDetailPage> {
                               Column(
                                 children: [
                                   Container(
-                                    height: 50,
-                                    width: 50,
+                                    height: 60,
+                                    width: 60,
                                     decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Colors.grey,
+                                      color: Colors.white,
                                     ),
-                                    child: Image.asset('assets/images/c2.png'),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(4.0),
+                                      child: Image.asset(widget.coin.icon),
+                                    ),
                                   ),
                                   Text(
                                     "0 ETH",
                                     style: pRegular14.copyWith(
                                       fontSize: 35,
-                                      color: Colors.white,
+                                      color: Colors.black,
                                       fontWeight: FontWeight.normal,
                                     ),
                                   ),
@@ -102,9 +105,9 @@ class _CryptoDetailPageState extends State<CryptoDetailPage> {
                                         onTap: () {
                                           Get.to(const SendCurrenyPage());
                                         },
-                                        child: const Column(
+                                        child: Column(
                                           children: [
-                                            CircleAvatar(
+                                            const CircleAvatar(
                                                 radius: 30.0,
                                                 backgroundColor:
                                                     ConstColors.secondary,
@@ -112,14 +115,13 @@ class _CryptoDetailPageState extends State<CryptoDetailPage> {
                                                   Icons.arrow_upward,
                                                   color: Colors.white,
                                                 )),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 7.0,
                                             ),
                                             Text(
                                               'Send',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
+                                              style: pRegular14.copyWith(
+                                                color: Colors.black,
                                               ),
                                             )
                                           ],
@@ -127,12 +129,16 @@ class _CryptoDetailPageState extends State<CryptoDetailPage> {
                                       ),
                                       const SizedBox(width: 30.0),
                                       BaseInkWell(
-                                        onTap: () {
-                                          Get.to(const RecieveCurrencyScreen());
+                                        onTap: () async {
+                                          Get.to(
+                                            RecieveCurrencyScreen(
+                                              coin: widget.coin,
+                                            ),
+                                          );
                                         },
-                                        child: const Column(
+                                        child: Column(
                                           children: [
-                                            CircleAvatar(
+                                            const CircleAvatar(
                                                 radius: 30.0,
                                                 backgroundColor:
                                                     ConstColors.secondary,
@@ -140,13 +146,16 @@ class _CryptoDetailPageState extends State<CryptoDetailPage> {
                                                   Icons.arrow_downward,
                                                   color: Colors.white,
                                                 )),
-                                            SizedBox(height: 7.0),
+                                            const SizedBox(height: 7.0),
                                             Text(
                                               'Receive',
-                                              style: TextStyle(
+                                              style: pRegular14.copyWith(
+                                                color: Colors.black,
+                                              ),
+                                              /* TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 12,
-                                              ),
+                                              ), */
                                             )
                                           ],
                                         ),
@@ -186,50 +195,52 @@ class _CryptoDetailPageState extends State<CryptoDetailPage> {
               ),
             ],
           ),
-          RefreshIndicator(
-            color: ConstColors.primary,
-            onRefresh: () async {
-              return;
-            },
-            child: ListView.builder(
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(
-                top: 20,
-                left: 10,
-                right: 10,
-              ),
-              itemCount: coinList.length,
-              itemBuilder: (context, index) {
-                return TransactionWidgetTile(
-                  time: DateTime.now(),
-                );
-                /* ListTile(
-                  onTap: () {
-                    /* Get.to(
-                      const CryptoDetailPage(),
-                    ); */
-                  },
-                  // leading: Icon(
-                  //   coinList[index].icon.icon,
-                  //   size: 50,
-                  // ),
-                  title: Text(
-                    coinList[index].name,
-                    style: pSemiBold18.copyWith(
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  subtitle: Text(
-                    coinList[index].rate,
-                    style: pRegular14.copyWith(
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  trailing: Text(
-                    coinList[index].total,
-                  ),
-                ); */
+          Expanded(
+            child: RefreshIndicator(
+              color: ConstColors.primary,
+              onRefresh: () async {
+                return;
               },
+              child: ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  left: 10,
+                  right: 10,
+                ),
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return TransactionWidgetTile(
+                    time: DateTime.now(),
+                  );
+                  /* ListTile(
+                    onTap: () {
+                      /* Get.to(
+                        const CryptoDetailPage(),
+                      ); */
+                    },
+                    // leading: Icon(
+                    //   coinList[index].icon.icon,
+                    //   size: 50,
+                    // ),
+                    title: Text(
+                      coinList[index].name,
+                      style: pSemiBold18.copyWith(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    subtitle: Text(
+                      coinList[index].rate,
+                      style: pRegular14.copyWith(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    trailing: Text(
+                      coinList[index].total,
+                    ),
+                  ); */
+                },
+              ),
             ),
           ),
         ],

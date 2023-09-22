@@ -1,76 +1,72 @@
 import 'dart:core';
 
-import 'package:flutter/material.dart';
+import 'package:cryp_wallet/redux/actions.dart';
+import 'package:cryp_wallet/redux/app_state.dart';
+import 'package:cryp_wallet/services/storage.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+
+import '../services/crypto_services.dart';
 
 class Coin {
-  late final Icon icon;
+  late final String icon;
   late final String name;
-  late final String usdPrice;
-  late final String rate;
   late final String total;
-  late final String usdTotal;
+  late final String address;
 
   Coin({
     required this.icon,
     required this.name,
-    required this.usdPrice,
-    required this.rate,
+    required this.address,
     required this.total,
-    required this.usdTotal,
   });
-}
 
-List<Coin> coinList = [
-  Coin(
-    icon: const Icon(
-      Icons.percent,
-    ),
-    name: 'Bitcoin',
-    usdPrice: '17.600',
-    rate: '+8.64%',
-    total: '1.00531',
-    usdTotal: '17693.456',
-  ),
-  Coin(
-    icon: const Icon(
-      Icons.ac_unit_outlined,
-    ),
-    name: 'Ethereum',
-    usdPrice: '129',
-    rate: '+4.93%',
-    total: '1.0934',
-    usdTotal: '141.04',
-  ),
-  Coin(
-    icon: const Icon(Icons.vaccines),
-    name: 'Binance Coin',
-    usdPrice: '20',
-    rate: '+7.33%',
-    total: '37',
-    usdTotal: '740',
-  ),
-  Coin(
-    icon: const Icon(Icons.earbuds_battery),
-    name: 'Litecoin',
-    usdPrice: '31.33',
-    rate: '+1.73%',
-    total: '11.243',
-    usdTotal: '352.24',
-  ),
-  Coin(
-    icon: const Icon(Icons.cabin),
-    name: 'XRP',
-    usdPrice: '0.31',
-    rate: '+3.02%',
-    total: '20',
-    usdTotal: '6.2',
-  ),
-  Coin(
-    icon: const Icon(Icons.kayaking),
-    name: 'Bitcoin Cash',
-    usdPrice: '324',
-    rate: '-2.09%',
-    total: '16.58',
-    usdTotal: '5371.92',
-  )
-];
+  static Future initializeCoinListVariable(context) async {
+    List<String> mnemunic = await MyStorage().getMnemonic();
+
+    Store<AppState> state = StoreProvider.of<AppState>(context);
+
+    BigInt btcBalance = (await CryptoWalletServices(mnemunic).getBtcBalance());
+
+    BigInt ethBalance = (await CryptoWalletServices(mnemunic).getETHBalance());
+    BigInt ercBalance = (await CryptoWalletServices(mnemunic)
+        .getERC20Balance("0xdac17f958d2ee523a2206206994597c13d831ec7"));
+    BigInt trxBalance = (await CryptoWalletServices(mnemunic).getTRXBalance());
+
+    List<Coin> coinList = [
+      Coin(
+        icon: 'assets/icons/btc.png',
+        name: 'BTC',
+        total: btcBalance.toString(),
+        address: CryptoWalletServices(mnemunic).getBtcAddress(),
+      ),
+      Coin(
+        icon: 'assets/icons/eth.png',
+        name: 'ETH',
+        total: ethBalance.toString(),
+        address: CryptoWalletServices(mnemunic).getEthAddress(),
+      ),
+      Coin(
+        icon: 'assets/icons/usdt.png',
+        name: 'USDT (ERC20)',
+        total: (ercBalance.toDouble() / 1000000).toString(),
+        address: CryptoWalletServices(mnemunic).getEthAddress(),
+      ),
+      Coin(
+        icon: 'assets/icons/usdt.png',
+        name: 'USDT (TRC20)',
+        total: '',
+        /* CryptoWalletServices(mnemunic).get().toString() */
+        address: CryptoWalletServices(mnemunic).getTronAddress(),
+      ),
+      Coin(
+        icon: 'assets/icons/trx.png',
+        name: "TRX",
+        total: trxBalance.toString(),
+        address: CryptoWalletServices(mnemunic).getTronAddress(),
+      ),
+    ];
+
+    state.dispatch(UpdateCoinList(coinList));
+  }
+}

@@ -1,8 +1,10 @@
 import 'package:cryp_wallet/Models/coin_model.dart';
 import 'package:cryp_wallet/config/text_style.dart';
+import 'package:cryp_wallet/redux/app_state.dart';
 import 'package:cryp_wallet/screens/send_recieve_screens/send_currency_page.dart';
 import 'package:cryp_wallet/widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:get/get.dart';
 
 class SendCurrencyOptionListScreen extends StatefulWidget {
@@ -25,56 +27,62 @@ class _SendCurrencyOptionListScreenState
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
       ), */
-      body: Column(
-        children: [
-          const CustomAppBar(
-            text: "Send Amount",
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(
-              top: 20,
-            ),
-            itemCount: coinList.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 5,
-                  horizontal: 20,
+      body: StoreConnector<AppState, List<Coin>>(
+          converter: (store) => store.state.coinList,
+          builder: (context, List<Coin> coinList) {
+            return Column(
+              children: [
+                const CustomAppBar(
+                  text: "Send Amount",
                 ),
-                onTap: () {
-                  Get.to(const SendCurrenyPage());
-                  /* Get.to(
-                    CryptoDetailPage(
-                      coin: coinList[index]
-                    ),
-                  ); */
-                },
-                leading: Icon(
-                  coinList[index].icon.icon,
-                  size: 50,
-                ),
-                title: Text(
-                  coinList[index].name,
-                  style: pRegular14.copyWith(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 20,
+                ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(
+                    top: 20,
                   ),
+                  itemCount: coinList.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 15,
+                          ),
+                          onTap: () {
+                            Get.to(
+                              const SendCurrenyPage(
+                                  // coin: coinList[index],
+                                  ),
+                            );
+                          },
+                          title: Text(
+                            coinList[index].name,
+                            style: pSemiBold18.copyWith(
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          leading: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              coinList[index].icon,
+                              height: 40,
+                              width: 40,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          trailing: Text(
+                            coinList[index].total,
+                          ),
+                        ),
+                        const Divider(),
+                      ],
+                    );
+                  },
                 ),
-                /* subtitle: Text(
-                  coinList[index].rate,
-                  style: pRegular14.copyWith(
-                    fontWeight: FontWeight.normal,
-                  ),
-                ), */
-                trailing: Text(
-                  coinList[index].total,
-                ),
-              );
-            },
-          ),
-        ],
-      ),
+              ],
+            );
+          }),
     );
   }
 

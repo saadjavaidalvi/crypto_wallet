@@ -1,7 +1,7 @@
-import 'package:biometric_storage/biometric_storage.dart';
 import 'package:cryp_wallet/config/colors.dart';
 import 'package:cryp_wallet/config/text_style.dart';
-import 'package:cryp_wallet/screens/onboarding/import_multicoin_wallet.dart';
+import 'package:cryp_wallet/screens/home_screen.dart';
+import 'package:cryp_wallet/services/storage.dart';
 import 'package:cryp_wallet/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -51,20 +51,22 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                       SizedBox(height: MediaQuery.of(context).padding.top + 15),
                       Row(
                         children: [
-                          InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: const CircleAvatar(
-                              radius: 18,
-                              backgroundColor: ConstColors.white,
-                              child: Icon(
-                                Icons.arrow_back,
-                                color: ConstColors.fontColor,
-                                size: 20,
-                              ),
-                            ),
-                          ),
+                          !widget.createNew
+                              ? Container()
+                              : InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const CircleAvatar(
+                                    radius: 18,
+                                    backgroundColor: ConstColors.white,
+                                    child: Icon(
+                                      Icons.arrow_back,
+                                      color: ConstColors.fontColor,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
                         ],
                       ),
                       const SizedBox(
@@ -139,11 +141,14 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                     text: "Continue",
                     color: ConstColors.primary,
                     onTap: () async {
-                      BiometricStorageFile storage = BiometricStorageFile(
-                          BiometricStorage(), '', PromptInfo.defaultValues);
-                      // BiometricStorage().read(name);
-                      // BiometricStorage().
-                      await storage.write('123456');
+                      /* BiometricStorageFile storage = await BiometricStorage()
+                          .getStorage('_authenticated',
+                              options: StorageFileInitOptions());
+
+                      await storage.write(
+                        '123456',
+                        promptInfo: PromptInfo.defaultValues,
+                      );
                       String response = await storage.read() ?? '';
 
                       print(response);
@@ -153,7 +158,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                         const ImportMultiCoinWallet(),
                         transition: Transition.rightToLeft,
                       );
-                      //! REMOVE LATER
+                      //! REMOVE LATER */
 
                       if (pinC.text.length < 6) {
                         Fluttertoast.showToast(msg: errorMessage);
@@ -168,10 +173,9 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                                 msg: 'Confirm Passcode doesn\'t match');
                             return;
                           }
+                          await MyStorage().savePasscodePin(confirmPin);
+
                           Get.back();
-                          //! UNCOMMENT LATER
-                          /* await MySharedPreference()
-                              .savePasscodePin(confirmPin); */
                           return;
                         }
                         passCode = pinC.text;
@@ -179,21 +183,23 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                         headerText = 'Confirm Passcode';
                         isConfirming = true;
                         setState(() {});
+                        return;
                       }
-                      /* else {
-                        String pin = pinC.text;
-                        String savedPasscode =
-                            await MySharedPreference().isValidPasscodePin();
-                        if (savedPasscode != pin) {
-                          Fluttertoast.showToast(
-                              msg: 'Invalid passcode. Please try again');
-                          return;
-                        }
-                        Get.to(
-                          const ImportMultiCoinWallet(),
-                          transition: Transition.rightToLeft,
-                        );
-                      } */
+
+                      String pin = pinC.text;
+
+                      final String savedPasscode = MyStorage().getPasscodePin();
+                      if (savedPasscode != pin) {
+                        Fluttertoast.showToast(
+                            msg: 'Invalid passcode. Please try again');
+                        return;
+                      }
+
+                      //! Update the path to remove previous path
+                      Get.to(
+                        const HomePage(),
+                        transition: Transition.rightToLeft,
+                      );
                     },
                   ),
                   const SizedBox(

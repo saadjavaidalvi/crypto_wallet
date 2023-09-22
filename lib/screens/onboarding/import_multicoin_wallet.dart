@@ -1,6 +1,8 @@
 import 'package:cryp_wallet/config/colors.dart';
 import 'package:cryp_wallet/config/text_style.dart';
 import 'package:cryp_wallet/screens/home_screen.dart';
+import 'package:cryp_wallet/services/crypto_services.dart';
+import 'package:cryp_wallet/services/storage.dart';
 import 'package:cryp_wallet/widget/custom_button.dart';
 import 'package:cryp_wallet/widget/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -72,9 +74,10 @@ class _ImportMultiCoinWalletState extends State<ImportMultiCoinWallet> {
                 validator: (v1) {
                   return null;
                 },
+                /* 
                 onChange: (va) {
                   // print(va);
-                },
+                }, */
                 error: false,
                 errorMessage: 'Error',
                 inputFormatters: const [],
@@ -117,9 +120,8 @@ class _ImportMultiCoinWalletState extends State<ImportMultiCoinWallet> {
                 color: ConstColors.primary,
                 text: 'Import',
                 onTap: () {
-                  Get.to(
-                    const HomePage(),
-                  );
+                  /* importPhrase(); */
+                  importPhraseLocally();
                 },
               ),
             ],
@@ -128,4 +130,47 @@ class _ImportMultiCoinWalletState extends State<ImportMultiCoinWallet> {
       ),
     );
   }
+
+  Future importPhraseLocally() async {
+    String phrase = phraseC.text.trim().toLowerCase();
+
+    bool isValid = await CryptoWalletServices.validateMnemonic(phrase);
+    if (!isValid) {
+      Fluttertoast.showToast(msg: 'Invalid Phrase');
+      return;
+    }
+
+    await MyStorage().saveMnemonic(phrase);
+
+    Get.to(
+      const HomePage(),
+    );
+  }
+
+  /* Future importPhrase() async {
+    String phrase = phraseC.text.trim().toLowerCase();
+
+    bool isValid = await CryptoWalletServices.validateMnemonic(phrase);
+    if (!isValid) {
+      Fluttertoast.showToast(msg: 'Invalid Phrase');
+      return;
+    }
+
+    String pin = '123456'; /* await getBioMetricPin(); */
+
+    String encrpt = CryptoWalletServices.encryptMnemonic(
+        phrase, pin, generateRandomNonce(12));
+    print(encrpt);
+    String decrypt = CryptoWalletServices.decryptMnemonic(encrpt, pin);
+    print(decrypt);
+  }
+
+  Uint8List generateRandomNonce(int length) {
+    final random = Random.secure();
+    final nonce = Uint8List(length);
+    for (var i = 0; i < length; i++) {
+      nonce[i] = random.nextInt(256); // Generate a random byte (0-255)
+    }
+    return nonce;
+  } */
 }
