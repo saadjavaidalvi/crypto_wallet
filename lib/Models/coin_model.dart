@@ -55,7 +55,7 @@ class Coin {
       Coin(
         icon: 'assets/icons/usdt.png',
         name: 'USDT (TRC20)',
-        total: '',
+        total: '0',
         /* CryptoWalletServices(mnemunic).get().toString() */
         address: CryptoWalletServices(mnemunic).getTronAddress(),
       ),
